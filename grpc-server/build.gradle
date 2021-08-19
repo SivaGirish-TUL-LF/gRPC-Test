@@ -1,0 +1,77 @@
+plugins {
+	id 'org.springframework.boot' version '2.5.0'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'com.google.protobuf' version '0.8.12'
+}
+
+group = 'com.tul'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	//implementation 'org.springframework.boot:spring-boot-starter'
+	//implementation 'org.springframework.boot:spring-boot-starter-web'
+	//implementation 'org.testng:testng:7.1.0'
+	//compileOnly 'org.projectlombok:lombok'
+	//developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	// annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	// annotationProcessor 'org.projectlombok:lombok'
+	//testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+
+	// GRPC
+	implementation group: 'io.grpc', name: 'grpc-stub', version: '1.37.0'
+	implementation group: 'io.grpc', name: 'grpc-protobuf', version: '1.37.0'
+	implementation group: 'io.grpc', name: 'grpc-netty-shaded', version: '1.37.0'
+	implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.15.8'
+	implementation group: 'net.devh', name: 'grpc-server-spring-boot-starter', version: '2.9.0.RELEASE'
+
+
+
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+}
+
+test {
+	useJUnitPlatform()
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs 'build/generated/source/proto/main/grpc'
+			srcDirs 'build/generated/source/proto/main/java'
+		}
+	}
+}
+
+protobuf {
+	protoc {
+		artifact = "com.google.protobuf:protoc:3.2.0"
+	}
+	plugins{
+		grpc {
+			artifact = 'io.grpc:protoc-gen-grpc-java:1.4.0'
+		}
+	}
+	generateProtoTasks {
+		all()*.plugins {
+			grpc {}
+		}
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
